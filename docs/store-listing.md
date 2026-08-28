@@ -10,39 +10,47 @@ XML as a collapsible tree, a sortable table, or JSON. XPath, CSV export, pretty 
 Developer Tools
 
 ## Description
-Tired of XML looking like a wall of text? This extension turns any XML file into a clean, collapsible, syntax-highlighted tree — automatically, the moment you open it. Then it does four things no other XML extension does.
+Most XML extensions make you open a popup and paste your file in — then show you the same tags you already had. This one just works: open any XML URL or file, and it renders instantly as a collapsible, colour-coded tree in the full browser window. Nothing to paste. Nothing to click.
 
-★ TABLE VIEW — the one you'll actually use
-Any XML with repeating elements (an RSS feed, a product feed, a sitemap, an invoice's line items) becomes a real sortable table. Columns are built from the child elements and attributes, click a header to sort, click a row to jump back to that node in the tree.
+Then it does four things no other XML extension does.
+
+★ TABLE VIEW
+Any XML with repeating elements — an RSS feed, a product feed, a sitemap, an invoice's line items — becomes a real sortable table. Columns are built automatically from the child elements and attributes. Click a header to sort, click a row to jump straight back to that node in the tree.
 
 ★ EXPORT TO CSV
-One click turns that table into a CSV you can open in Excel or Google Sheets. Finally read the XML your supplier, bank or accountant sent you.
+One click turns that table into a CSV for Excel or Google Sheets. Finally read the XML your supplier, bank or accountant sent you.
 
 ★ XML → JSON
-Convert the whole document to clean JSON, then copy or download it. Repeated tags become arrays, attributes become @name.
+Convert the whole document to clean JSON and copy or download it. Repeated tags become arrays, attributes become @name.
 
 ★ STRUCTURE OUTLINE
-For a 40,000-line file nobody documented: every element path with its occurrence count, attributes and a sample value. Click any path to jump straight to it. Declared namespaces are listed too, and one click drops the right prefix into the XPath box.
+For a 40,000-line file nobody documented: every element path with its occurrence count, its attributes and a sample value. Click any path to jump to it. Declared namespaces are listed too, and one click drops the right prefix into the XPath box.
+
+BUILT FROM THE COMPLAINTS ABOUT EVERY OTHER XML EXTENSION
+• "It only shows the raw text, same as Notepad." — Here you get a real tree: fold a 10,000-row file to one line, colour-coded tags, attributes and values, child counts on every node.
+• "It doesn't work on XML URLs, only on files I paste in." — This renders XML served from any URL automatically: API responses, feeds, sitemaps, SOAP. Also local file:// files (switch on "Allow access to file URLs") and drag-and-drop.
+• "No full screen, too much scrolling on big files." — It takes the whole window, and rendering is lazy, so multi-megabyte documents open in milliseconds instead of freezing the tab.
+• "Everything is collapsed and there's no way to open it all." — Expand all and Collapse all, always one click away.
+• "The format button does nothing." — Every control is covered by an automated test suite that runs against real live feeds before each release.
 
 EVERYTHING ELSE
-• Collapsible tree with child counts, lazy-rendered so multi-MB files stay fast
 • XPath search: //item[@id], count(//row), namespace-aware
-• Full-text search across tags, attributes and text with next/previous
-• Pretty print / Raw view with line numbers; copy or download formatted XML
+• Full-text search across tags, attributes and text, with next / previous
+• Pretty print and Raw view with line numbers; copy or download the formatted XML
 • Click any node to copy its exact XPath
-• Parse errors shown with the broken line highlighted
-• Dark mode (auto / light / dark)
+• Parse errors shown with the broken line highlighted, instead of a blank page
+• Dark mode: auto, light or dark
 
-WORKS EVERYWHERE
-• XML from the web: RSS, Atom, sitemaps, SOAP/WSDL, XSD schemas, GPX, KML, plist
-• E-invoices: UBL, FatturaPA, XRechnung, Peppol
-• Local files: file:// URLs (enable "Allow access to file URLs"), or drag & drop / paste into the built-in viewer page
+NO TRACKING. NO INJECTED ADS. EVER.
+This extension makes zero network requests. It cannot show you a popup on a shopping page, cannot touch your affiliate links, cannot see the sites you visit. It reads XML documents and nothing else. The only stored setting is your light/dark preference.
 
-PRIVATE BY DESIGN
-Everything runs 100% locally in your browser. No network requests, no analytics, no account, no tracking — ever. Open source:
+Do not take our word for it — the entire source code is public:
 https://github.com/matan869/xml-tree-viewer
 
-Free forever. If it saves you time, a rating helps others find it.
+WORKS WITH
+RSS and Atom feeds, sitemaps, SOAP and WSDL, XSD schemas, GPX, KML, plist, OPML, and e-invoice formats including UBL, FatturaPA, XRechnung and Peppol.
+
+Free forever, MIT licensed. If it saves you time, a rating helps other people find it.
 
 ## Privacy policy URL
 https://github.com/matan869/xml-tree-viewer/blob/master/PRIVACY.md
