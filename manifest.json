@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "XML Viewer & Formatter – Tree, XPath",
-  "version": "1.0.1",
-  "description": "Opens XML as a collapsible tree: pretty print, XPath, search, dark mode. Works offline on web & local files. Free, no tracking.",
+  "version": "1.1.0",
+  "description": "XML as a collapsible tree, sortable table or JSON. XPath, CSV export, pretty print, dark mode. Offline, free, no tracking.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -19,11 +19,21 @@
       "128": "icons/icon128.png"
     }
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "content_scripts": [
     {
-      "matches": ["*://*/*", "file:///*"],
-      "js": ["src/xml.js", "src/tree.js", "src/detect.js"],
+      "matches": [
+        "*://*/*",
+        "file:///*"
+      ],
+      "js": [
+        "src/xml.js",
+        "src/features.js",
+        "src/tree.js",
+        "src/detect.js"
+      ],
       "run_at": "document_idle",
       "all_frames": false
     }

@@ -65,6 +65,33 @@
   opacity:0; transition:opacity .2s; pointer-events:none; }
 .xv-toast[data-show="1"] { opacity:.92; }
 .xv-sep { width:1px; align-self:stretch; background:var(--xv-line); margin:0 2px; }
+.xv-panel { display:none; }
+.xv-phead { display:flex; align-items:center; gap:10px; margin:2px 0 12px; flex-wrap:wrap;
+  font-family:system-ui,sans-serif; }
+.xv-ptitle { font-weight:700; font-size:14px; }
+.xv-psub { color:var(--xv-dim); font-size:12px; }
+.xv-grid { border-collapse:collapse; width:100%; font-size:12.5px; }
+.xv-grid th, .xv-grid td { border:1px solid var(--xv-line); padding:5px 9px; text-align:left;
+  vertical-align:top; max-width:340px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.xv-grid th { position:sticky; top:0; background:var(--xv-bar); cursor:pointer; user-select:none;
+  font-family:system-ui,sans-serif; z-index:1; white-space:nowrap; }
+.xv-grid th:hover { color:var(--xv-accent); }
+.xv-grid th .xv-sort { color:var(--xv-accent); }
+.xv-grid tbody tr:nth-child(even) { background:var(--xv-hover); }
+.xv-grid tbody tr:hover { background:var(--xv-sel); }
+.xv-grid td.xv-num { text-align:right; font-variant-numeric:tabular-nums; }
+.xv-rowno { color:var(--xv-punc); width:1%; text-align:right; }
+.xv-json { font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace; white-space:pre; margin:0; }
+.xv-chip { display:inline-block; background:var(--xv-badge); color:var(--xv-badge-fg);
+  border-radius:6px; padding:2px 8px; margin:0 5px 5px 0; font:11.5px system-ui,sans-serif; cursor:pointer; }
+.xv-chip:hover { background:var(--xv-accent); color:#fff; }
+.xv-olist { font-size:12.5px; }
+.xv-orow { display:flex; gap:10px; padding:3px 6px; border-radius:5px; cursor:pointer; align-items:baseline; }
+.xv-orow:hover { background:var(--xv-hover); }
+.xv-opath { color:var(--xv-tag); flex:0 0 auto; }
+.xv-ocount { color:var(--xv-badge-fg); background:var(--xv-badge); border-radius:8px;
+  padding:0 7px; font:10.5px system-ui,sans-serif; }
+.xv-osample { color:var(--xv-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 @media (max-width:760px){ .xv-xpath{width:140px} .xv-search{width:110px} }
 `;
 
@@ -108,6 +135,9 @@
     bar.appendChild(xpath); bar.appendChild(xpathBtn);
     bar.appendChild(el(doc, "div", "xv-sep"));
 
+    const tableBtn = btn("Table"), jsonBtn = btn("JSON"), outlineBtn = btn("Structure");
+    [tableBtn, jsonBtn, outlineBtn].forEach((b) => bar.appendChild(b));
+    bar.appendChild(el(doc, "div", "xv-sep"));
     const expandBtn = btn("Expand all"), collapseBtn = btn("Collapse all"),
       rawBtn = btn("Raw"), copyBtn = btn("Copy"), dlBtn = btn("Download"), themeBtn = btn("◐");
     [expandBtn, collapseBtn, rawBtn, copyBtn, dlBtn, themeBtn].forEach((b) => bar.appendChild(b));
@@ -120,7 +150,9 @@
     const main = el(doc, "div", "xv-main");
     const tree = el(doc, "ul", "xv-tree");
     const raw = el(doc, "pre", "xv-raw");
-    main.appendChild(tree); main.appendChild(raw);
+    const panel = el(doc, "div", "xv-panel");
+    panel.style.display = "none";
+    main.appendChild(tree); main.appendChild(raw); main.appendChild(panel);
     rootEl.appendChild(main);
 
     const status = el(doc, "div", "xv-status");
@@ -171,6 +203,7 @@
       raw.style.display = "block";
       renderRaw(xmlText, loc);
       rawBtn.style.display = expandBtn.style.display = collapseBtn.style.display = "none";
+      tableBtn.style.display = jsonBtn.style.display = outlineBtn.style.display = "none";
       xpath.disabled = search.disabled = true;
       stats.textContent = XMLV.formatBytes(xmlText.length);
       wireCopyDownload(xmlText);
@@ -382,14 +415,9 @@
       raw.appendChild(frag);
     }
     rawBtn.addEventListener("click", () => {
-      const showRaw = raw.style.display !== "block";
-      if (showRaw && pretty === null) {
-        pretty = XMLV.prettyPrint(xmlText, { indent });
-        renderRaw(pretty);
-      }
-      raw.style.display = showRaw ? "block" : "none";
-      tree.style.display = showRaw ? "none" : "";
-      rawBtn.setAttribute("data-on", showRaw ? "1" : "0");
+      if (typeof activeView !== "undefined" && activeView === "raw") { showView("tree"); return; }
+      if (pretty === null) { pretty = XMLV.prettyPrint(xmlText, { indent }); renderRaw(pretty); }
+      showView("raw");
     });
 
     // ---------- copy / download ----------
@@ -535,6 +563,200 @@
     }
     xpath.addEventListener("keydown", (e) => { if (e.key === "Enter") runXPath(); });
     xpathBtn.addEventListener("click", runXPath);
+
+    // ---------- panels: Table / JSON / Structure ----------
+    let activeView = "tree";
+    function showView(v) {
+      activeView = v;
+      tree.style.display = v === "tree" ? "" : "none";
+      raw.style.display = v === "raw" ? "block" : "none";
+      panel.style.display = v === "tree" || v === "raw" ? "none" : "block";
+      for (const [b, name] of [[rawBtn, "raw"], [tableBtn, "table"], [jsonBtn, "json"], [outlineBtn, "outline"]]) {
+        b.setAttribute("data-on", v === name ? "1" : "0");
+      }
+    }
+    function clearPanel() { while (panel.firstChild) panel.removeChild(panel.firstChild); }
+
+    // --- Table view -------------------------------------------------------
+    let groups = null, groupIdx = 0;
+    function renderTable() {
+      if (!groups) groups = XMLV.findRepeatingGroups(parsed, 2);
+      clearPanel();
+      if (!groups.length) {
+        panel.appendChild(el(doc, "div", "xv-psub",
+          "No repeating elements found — the table view needs at least two sibling elements with the same name."));
+        showView("table");
+        return;
+      }
+      const g = groups[Math.min(groupIdx, groups.length - 1)];
+      const t = XMLV.buildTable(g);
+
+      const head = el(doc, "div", "xv-phead");
+      head.appendChild(el(doc, "span", "xv-ptitle", "<" + t.tag + "> × " + t.data.length));
+      head.appendChild(el(doc, "span", "xv-psub", t.columns.length + " columns"));
+      const csvBtn = el(doc, "button", "xv-btn", "Download CSV");
+      csvBtn.addEventListener("click", () => {
+        const csv = XMLV.toCsv(t.columns, view.map((r) => r.cells));
+        const a = el(doc, "a");
+        a.setAttribute("download", (opts.filename || "table") + "-" + t.tag + ".csv");
+        a.setAttribute("href", "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURIComponent(csv));
+        panel.appendChild(a); a.click(); a.remove();
+        say("CSV downloaded");
+      });
+      const copyCsvBtn = el(doc, "button", "xv-btn", "Copy CSV");
+      copyCsvBtn.addEventListener("click", async () => {
+        try { await root.navigator.clipboard.writeText(XMLV.toCsv(t.columns, view.map((r) => r.cells))); say("CSV copied"); }
+        catch (e) { say("Copy failed"); }
+      });
+      head.appendChild(csvBtn); head.appendChild(copyCsvBtn);
+      if (groups.length > 1) {
+        const pick = el(doc, "span", "xv-psub", "other groups:");
+        head.appendChild(pick);
+        groups.slice(0, 8).forEach((gg, i) => {
+          const chip = el(doc, "span", "xv-chip", gg.tag + " (" + gg.rows.length + ")");
+          chip.addEventListener("click", () => { groupIdx = i; renderTable(); });
+          head.appendChild(chip);
+        });
+      }
+      panel.appendChild(head);
+
+      let view = t.data.map((cells, i) => ({ cells, i }));
+      let sortCol = -1, sortDir = 1;
+      const table = el(doc, "table", "xv-grid");
+      const thead = el(doc, "thead");
+      const trh = el(doc, "tr");
+      trh.appendChild(el(doc, "th", "xv-rowno", "#"));
+      t.columns.forEach((c, ci) => {
+        const th = el(doc, "th");
+        th.appendChild(el(doc, "span", null, c));
+        const caret = el(doc, "span", "xv-sort", "");
+        th.appendChild(caret);
+        th.addEventListener("click", () => {
+          sortDir = sortCol === ci ? -sortDir : 1;
+          sortCol = ci;
+          const num = view.every((r) => r.cells[ci] === "" || !isNaN(Number(r.cells[ci])));
+          view.sort((a, b) => {
+            const x = a.cells[ci], y = b.cells[ci];
+            const c2 = num ? (Number(x || 0) - Number(y || 0)) : String(x).localeCompare(String(y));
+            return c2 * sortDir;
+          });
+          body2();
+          for (const el2 of thead.querySelectorAll(".xv-sort")) el2.textContent = "";
+          caret.textContent = sortDir > 0 ? " ▲" : " ▼";
+        });
+        trh.appendChild(th);
+      });
+      thead.appendChild(trh);
+      table.appendChild(thead);
+      const tb = el(doc, "tbody");
+      table.appendChild(tb);
+      function body2() {
+        while (tb.firstChild) tb.removeChild(tb.firstChild);
+        const MAX = 3000;
+        view.slice(0, MAX).forEach((r, n) => {
+          const tr = el(doc, "tr");
+          tr.appendChild(el(doc, "td", "xv-rowno", String(n + 1)));
+          r.cells.forEach((v) => {
+            const td = el(doc, "td", v !== "" && !isNaN(Number(v)) ? "xv-num" : null, v);
+            td.setAttribute("title", v);
+            tr.appendChild(td);
+          });
+          tr.addEventListener("click", () => { showView("tree"); reveal(t.rows[r.i]); });
+          tb.appendChild(tr);
+        });
+        if (view.length > MAX) {
+          const tr = el(doc, "tr");
+          const td = el(doc, "td", "xv-psub", "… " + (view.length - MAX) + " more rows (CSV export includes all)");
+          td.setAttribute("colspan", String(t.columns.length + 1));
+          tr.appendChild(td); tb.appendChild(tr);
+        }
+      }
+      body2();
+      panel.appendChild(table);
+      showView("table");
+    }
+    tableBtn.addEventListener("click", () => {
+      if (activeView === "table") { showView("tree"); return; }
+      renderTable();
+    });
+
+    // --- JSON view --------------------------------------------------------
+    let jsonText = null;
+    jsonBtn.addEventListener("click", () => {
+      if (activeView === "json") { showView("tree"); return; }
+      if (jsonText === null) {
+        try { jsonText = JSON.stringify(XMLV.docToJson(parsed), null, 2); }
+        catch (e) { say("Conversion failed: " + e.message); return; }
+      }
+      clearPanel();
+      const head = el(doc, "div", "xv-phead");
+      head.appendChild(el(doc, "span", "xv-ptitle", "XML → JSON"));
+      head.appendChild(el(doc, "span", "xv-psub", XMLV.formatBytes(jsonText.length)));
+      const cp = el(doc, "button", "xv-btn", "Copy JSON");
+      cp.addEventListener("click", async () => {
+        try { await root.navigator.clipboard.writeText(jsonText); say("JSON copied"); } catch (e) { say("Copy failed"); }
+      });
+      const dl = el(doc, "button", "xv-btn", "Download .json");
+      dl.addEventListener("click", () => {
+        const a = el(doc, "a");
+        a.setAttribute("download", (opts.filename || "document") + ".json");
+        a.setAttribute("href", "data:application/json;charset=utf-8," + encodeURIComponent(jsonText));
+        panel.appendChild(a); a.click(); a.remove();
+        say("Downloading JSON…");
+      });
+      head.appendChild(cp); head.appendChild(dl);
+      panel.appendChild(head);
+      const pre = el(doc, "pre", "xv-json");
+      pre.textContent = jsonText.length > 400000 ? jsonText.slice(0, 400000) + "\n… (truncated for display; Copy/Download give the full document)" : jsonText;
+      panel.appendChild(pre);
+      showView("json");
+    });
+
+    // --- Structure outline + namespaces -----------------------------------
+    outlineBtn.addEventListener("click", () => {
+      if (activeView === "outline") { showView("tree"); return; }
+      clearPanel();
+      const head = el(doc, "div", "xv-phead");
+      head.appendChild(el(doc, "span", "xv-ptitle", "Structure"));
+      head.appendChild(el(doc, "span", "xv-psub", "every element path in this document — click to jump"));
+      panel.appendChild(head);
+
+      const ns = XMLV.namespaces(parsed);
+      if (ns.length) {
+        const nh = el(doc, "div", "xv-phead");
+        nh.appendChild(el(doc, "span", "xv-psub", "Namespaces (click to copy an XPath prefix):"));
+        for (const { prefix, uri } of ns) {
+          const chip = el(doc, "span", "xv-chip", prefix + " → " + uri.replace(/^https?:\/\//, "").slice(0, 42));
+          chip.setAttribute("title", uri);
+          chip.addEventListener("click", async () => {
+            const p2 = prefix === "(default)" ? "_" : prefix;
+            xpath.value = "//" + p2 + ":";
+            xpath.focus();
+            say("Prefix inserted — " + (prefix === "(default)" ? "use _ for the default namespace" : prefix));
+          });
+          nh.appendChild(chip);
+        }
+        panel.appendChild(nh);
+      }
+
+      const rows = XMLV.outline(parsed).sort((a, b) => b.count - a.count || a.path.localeCompare(b.path));
+      const list = el(doc, "div", "xv-olist");
+      for (const r of rows.slice(0, 600)) {
+        const row = el(doc, "div", "xv-orow");
+        row.appendChild(el(doc, "span", "xv-ocount", String(r.count)));
+        row.appendChild(el(doc, "span", "xv-opath", r.path));
+        if (r.attrs.length) row.appendChild(el(doc, "span", "xv-psub", "@" + r.attrs.join(" @")));
+        if (r.sample) row.appendChild(el(doc, "span", "xv-osample", r.sample));
+        row.addEventListener("click", () => {
+          xpath.value = "//" + r.path.split("/").pop();
+          showView("tree");
+          runXPath();
+        });
+        list.appendChild(row);
+      }
+      panel.appendChild(list);
+      showView("outline");
+    });
 
     // ---------- keyboard ----------
     doc.addEventListener("keydown", (e) => {

@@ -70,3 +70,13 @@ t("idempotent: format(format(x)) == format(x)", () => {
   assert.equal(X.prettyPrint(once), once);
 });
 console.log("\n" + n + " tests passed");
+
+// ---- features ----
+const F = require("../src/features.js");
+t("csv escaping", () => {
+  assert.equal(F.csvEscape('a,b'), '"a,b"');
+  assert.equal(F.csvEscape('say "hi"'), '"say ""hi"""');
+  assert.equal(F.csvEscape("plain"), "plain");
+  assert.equal(F.toCsv(["a","b"],[["1","x,y"]]), 'a,b\r\n1,"x,y"');
+});
+console.log("\n" + (n+1) + " tests passed (incl. features)");
