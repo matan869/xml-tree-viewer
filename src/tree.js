@@ -186,10 +186,13 @@
     let rendered = 0;
 
     function shortValue(node) {
-      // <tag>text</tag> with nothing else -> render on one line
+      // <tag>text</tag> or <tag><![CDATA[..]]></tag> -> render on one line.
+      // RSS/Atom wrap nearly every field in CDATA, so inlining it matters.
       const kids = node.childNodes;
-      if (kids.length === 1 && kids[0].nodeType === 3) return kids[0].nodeValue;
       if (kids.length === 0) return "";
+      if (kids.length === 1 && (kids[0].nodeType === 3 || kids[0].nodeType === 4)) {
+        return { text: kids[0].nodeValue, cdata: kids[0].nodeType === 4 };
+      }
       return null;
     }
 
@@ -265,11 +268,16 @@
       const simple = shortValue(node);
       if (simple !== null) {
         line.appendChild(el(doc, "span", "xv-nocaret"));
-        appendTag(line, node, false, simple === "" && node.childNodes.length === 0);
-        if (simple !== "") {
-          line.appendChild(textSpan(simple.trim()));
-          appendTag(line, node, true);
-        } else if (node.childNodes.length !== 0) {
+        const empty = simple === "";
+        appendTag(line, node, false, empty);
+        if (!empty) {
+          if (simple.cdata) {
+            line.appendChild(el(doc, "span", "xv-punc", "<![CDATA["));
+            line.appendChild(textSpan(simple.text, "xv-cdata"));
+            line.appendChild(el(doc, "span", "xv-punc", "]]>"));
+          } else {
+            line.appendChild(textSpan(simple.text.trim()));
+          }
           appendTag(line, node, true);
         }
         return li;

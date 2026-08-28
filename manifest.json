@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "XML Viewer & Formatter – Tree, XPath",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Opens XML as a collapsible tree: pretty print, XPath, search, dark mode. Works offline on web & local files. Free, no tracking.",
   "icons": {
     "16": "icons/icon16.png",
