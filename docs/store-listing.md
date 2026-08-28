@@ -1,10 +1,10 @@
 # Chrome Web Store listing — XML Viewer
 
-## Name (45 max)
-XML Viewer: Tree, Table, JSON, E-Invoice
+## Name (75 max, ~50 shown)
+XML Viewer & Formatter: Tree, Table, JSON, E-Invoice
 
 ## Summary (132 max)
-Read any XML: collapsible tree, sortable table, XML to JSON, CSV export, XPath. Opens UBL/XRechnung/FatturaPA invoices & camt.053.
+XML viewer & formatter: readable tree, sortable table, XML to JSON, CSV, XPath. Opens UBL, XRechnung, FatturaPA & camt.053 files.
 
 ## Category
 Developer Tools
@@ -47,8 +47,8 @@ This extension makes zero network requests. Your invoices and bank statements ne
 Do not take our word for it — the entire source code is public:
 https://github.com/matan869/xml-tree-viewer
 
-ALSO SEARCHED FOR AS
-xml reader, xml beautifier, xml pretty print, xml tree viewer, xml table viewer, view xml as table, xml to json converter, xml to csv, xml to excel, open xml file in chrome, view xml file in a readable format, ubl invoice viewer, peppol viewer, xrechnung anzeigen, zugferd viewer, fatturapa viewer, ksef viewer, camt.053 viewer, camt to csv.
+TYPICAL USES
+Reading an XML file in a readable format instead of raw text. Pretty-printing and beautifying XML. Converting XML to JSON, to CSV or to Excel. Inspecting an RSS feed, a sitemap or a SOAP response. Opening a UBL or Peppol invoice, an XRechnung or ZUGFeRD invoice, a FatturaPA or KSeF invoice, or a camt.053 bank statement, and exporting it to CSV.
 
 WORKS WITH
 RSS and Atom feeds, sitemaps, SOAP and WSDL, XSD schemas, GPX, KML, plist, OPML, e-invoices (UBL, FatturaPA, XRechnung, ZUGFeRD, Peppol) and ISO 20022 bank statements.

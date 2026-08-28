@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "XML Viewer: Tree, Table, JSON, E-Invoice",
+  "name": "XML Viewer & Formatter: Tree, Table, JSON, E-Invoice",
   "version": "1.2.0",
-  "description": "Read any XML: collapsible tree, sortable table, XML to JSON, CSV export, XPath. Opens UBL/XRechnung/FatturaPA invoices & camt.053.",
+  "description": "XML viewer & formatter: readable tree, sortable table, XML to JSON, CSV, XPath. Opens UBL, XRechnung, FatturaPA & camt.053 files.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
