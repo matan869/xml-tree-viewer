@@ -1,34 +1,34 @@
-# Chrome Web Store listing — XML Viewer & Formatter
+# Chrome Web Store listing — XML Viewer
 
 ## Name (45 max)
-XML Viewer & Formatter: Tree, Table, JSON
+XML Viewer: Tree, Table, JSON, E-Invoice
 
 ## Summary (132 max)
-View, format and read XML instantly: collapsible tree, sortable table, XML to JSON, CSV export, XPath, dark mode. Free, offline.
+Read any XML: collapsible tree, sortable table, XML to JSON, CSV export, XPath. Opens UBL/XRechnung/FatturaPA invoices & camt.053.
+
 ## Category
 Developer Tools
 
 ## Description
-Most XML extensions make you open a popup and paste your file in — then show you the same tags you already had. This one just works: open any XML URL or file, and it renders instantly as a collapsible, colour-coded tree in the full browser window. Nothing to paste. Nothing to click.
+Most XML extensions make you open a popup and paste your file in — then show you the same tags you already had. This one just works: open any XML URL or file and it renders instantly, in the full browser window.
 
-Then it does four things no other XML extension does.
+★ IT OPENS E-INVOICES AS ACTUAL INVOICES
+Received an XML invoice you cannot read? Since the EU e-invoicing mandates (Germany 2025, Belgium and Poland 2026, France 2026-2027, Italy FatturaPA) millions of people get sent structured XML instead of a PDF. This extension recognises the format and lays it out as a normal invoice: supplier and customer, line items, VAT breakdown, totals, IBAN and payment terms — with a Print / Save as PDF button.
+Supported: UBL 2.1 and Peppol BIS (EN 16931), XRechnung and ZUGFeRD / Factur-X (UN/CEFACT CII), FatturaPA, KSeF.
 
-★ TABLE VIEW
-Any XML with repeating elements — an RSS feed, a product feed, a sitemap, an invoice's line items — becomes a real sortable table. Columns are built automatically from the child elements and attributes. Click a header to sort, click a row to jump straight back to that node in the tree.
+★ IT OPENS BANK STATEMENTS TOO
+ISO 20022 camt.053 and camt.052 become a readable statement: opening and closing balance, money in, money out, and every transaction with counterparty, reference and date — exportable to CSV for your accounting software.
 
-★ EXPORT TO CSV
-One click turns that table into a CSV for Excel or Google Sheets. Finally read the XML your supplier, bank or accountant sent you.
+★ TABLE VIEW FOR ANY XML
+Any XML with repeating elements — an RSS feed, a product feed, a sitemap — becomes a sortable table. Columns are built automatically from the child elements and attributes. Click a header to sort, click a row to jump back to that node.
 
-★ XML → JSON
-Convert the whole document to clean JSON and copy or download it. Repeated tags become arrays, attributes become @name.
-
-★ STRUCTURE OUTLINE
-For a 40,000-line file nobody documented: every element path with its occurrence count, its attributes and a sample value. Click any path to jump to it. Declared namespaces are listed too, and one click drops the right prefix into the XPath box.
+★ EXPORT TO CSV · XML → JSON · STRUCTURE OUTLINE
+One click turns a table into CSV for Excel or Google Sheets. Convert the whole document to clean JSON and copy or download it. Or get the structure outline: every element path with its count, attributes and a sample value, for the 40,000-line file nobody documented.
 
 BUILT FROM THE COMPLAINTS ABOUT EVERY OTHER XML EXTENSION
 • "It only shows the raw text, same as Notepad." — Here you get a real tree: fold a 10,000-row file to one line, colour-coded tags, attributes and values, child counts on every node.
-• "It doesn't work on XML URLs, only on files I paste in." — This renders XML served from any URL automatically: API responses, feeds, sitemaps, SOAP. Also local file:// files (switch on "Allow access to file URLs") and drag-and-drop.
-• "No full screen, too much scrolling on big files." — It takes the whole window, and rendering is lazy, so multi-megabyte documents open in milliseconds instead of freezing the tab.
+• "It doesn't work on XML URLs, only files I paste in." — This renders XML served from any URL automatically: API responses, feeds, sitemaps, SOAP. Also local file:// files (switch on "Allow access to file URLs") and drag-and-drop.
+• "No full screen, too much scrolling on big files." — It takes the whole window and renders lazily, so multi-megabyte documents open in milliseconds instead of freezing the tab.
 • "Everything is collapsed and there's no way to open it all." — Expand all and Collapse all, always one click away.
 • "The format button does nothing." — Every control is covered by an automated test suite that runs against real live feeds before each release.
 
@@ -39,21 +39,21 @@ EVERYTHING ELSE
 • Click any node to copy its exact XPath
 • Parse errors shown with the broken line highlighted, instead of a blank page
 • Dark mode: auto, light or dark
+• Right-to-left aware: Hebrew and Arabic values display correctly
 
 NO TRACKING. NO INJECTED ADS. EVER.
-This extension makes zero network requests. It cannot show you a popup on a shopping page, cannot touch your affiliate links, cannot see the sites you visit. It reads XML documents and nothing else. The only stored setting is your light/dark preference.
+This extension makes zero network requests. Your invoices and bank statements never leave your computer. It cannot show you a popup on a shopping page, cannot touch your affiliate links, cannot see the sites you visit. It reads XML and nothing else. The only stored setting is your light/dark preference.
 
 Do not take our word for it — the entire source code is public:
 https://github.com/matan869/xml-tree-viewer
 
 ALSO SEARCHED FOR AS
-xml reader, xml beautifier, xml pretty print, xml tree viewer, xml table viewer, view xml as table, xml to json converter, xml to csv, xml to excel, open xml file in chrome, view xml file in a readable format.
+xml reader, xml beautifier, xml pretty print, xml tree viewer, xml table viewer, view xml as table, xml to json converter, xml to csv, xml to excel, open xml file in chrome, view xml file in a readable format, ubl invoice viewer, peppol viewer, xrechnung anzeigen, zugferd viewer, fatturapa viewer, ksef viewer, camt.053 viewer, camt to csv.
 
 WORKS WITH
-RSS and Atom feeds, sitemaps, SOAP and WSDL, XSD schemas, GPX, KML, plist, OPML, and e-invoice formats including UBL, FatturaPA, XRechnung and Peppol.
+RSS and Atom feeds, sitemaps, SOAP and WSDL, XSD schemas, GPX, KML, plist, OPML, e-invoices (UBL, FatturaPA, XRechnung, ZUGFeRD, Peppol) and ISO 20022 bank statements.
 
 Free forever, MIT licensed. If it saves you time, a rating helps other people find it.
-
 
 ## Privacy policy URL
 https://github.com/matan869/xml-tree-viewer/blob/master/PRIVACY.md
@@ -71,7 +71,7 @@ Collects nothing. All checkboxes "No". Certify no data collected/transferred.
 
 ## Assets
 - Icon 128: icons/icon128.png
-- Screenshots (1280×800): store-assets/shot1-tree-light.png, shot2-tree-dark.png, shot3-raw-dark.png, shot4-landing.png
+- Screenshots (1280×800): store-assets/n1-invoice.png, n2-statement.png, n3-table.png, n4-tree-dark.png, n5-json.png
 - Small promo tile 440×280: store-assets/promo-440x280.png
 
 ## Search-relevant phrasing already in description

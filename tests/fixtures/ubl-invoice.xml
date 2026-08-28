@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+  <cbc:CustomizationID>urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0</cbc:CustomizationID>
+  <cbc:ID>INV-2026-0042</cbc:ID>
+  <cbc:IssueDate>2026-08-14</cbc:IssueDate>
+  <cbc:DueDate>2026-09-13</cbc:DueDate>
+  <cbc:DocumentCurrencyCode>EUR</cbc:DocumentCurrencyCode>
+  <cbc:BuyerReference>PO-99120</cbc:BuyerReference>
+  <cbc:Note>Delivery in two shipments.</cbc:Note>
+  <cac:AccountingSupplierParty><cac:Party>
+    <cac:PartyName><cbc:Name>Nordwind Logistik GmbH</cbc:Name></cac:PartyName>
+    <cac:PostalAddress><cbc:StreetName>Hafenstrasse 14</cbc:StreetName><cbc:CityName>Hamburg</cbc:CityName>
+      <cbc:PostalZone>20359</cbc:PostalZone><cac:Country><cbc:IdentificationCode>DE</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
+    <cac:PartyTaxScheme><cbc:CompanyID>DE811907980</cbc:CompanyID></cac:PartyTaxScheme>
+    <cac:PartyLegalEntity><cbc:RegistrationName>Nordwind Logistik GmbH</cbc:RegistrationName></cac:PartyLegalEntity>
+    <cac:Contact><cbc:Name>A. Brandt</cbc:Name><cbc:ElectronicMail>ap@nordwind.example</cbc:ElectronicMail></cac:Contact>
+  </cac:Party></cac:AccountingSupplierParty>
+  <cac:AccountingCustomerParty><cac:Party>
+    <cac:PartyLegalEntity><cbc:RegistrationName>Beaulieu Retail SA</cbc:RegistrationName></cac:PartyLegalEntity>
+    <cac:PostalAddress><cbc:StreetName>Rue Neuve 3</cbc:StreetName><cbc:CityName>Bruxelles</cbc:CityName>
+      <cbc:PostalZone>1000</cbc:PostalZone><cac:Country><cbc:IdentificationCode>BE</cbc:IdentificationCode></cac:Country></cac:PostalAddress>
+    <cac:PartyTaxScheme><cbc:CompanyID>BE0876543210</cbc:CompanyID></cac:PartyTaxScheme>
+  </cac:Party></cac:AccountingCustomerParty>
+  <cac:PaymentMeans><cbc:PaymentID>RF18INV20260042</cbc:PaymentID>
+    <cac:PayeeFinancialAccount><cbc:ID>DE89370400440532013000</cbc:ID>
+      <cac:FinancialInstitutionBranch><cbc:ID>COBADEFFXXX</cbc:ID></cac:FinancialInstitutionBranch>
+    </cac:PayeeFinancialAccount></cac:PaymentMeans>
+  <cac:PaymentTerms><cbc:Note>Net 30 days</cbc:Note></cac:PaymentTerms>
+  <cac:TaxTotal><cbc:TaxAmount currencyID="EUR">399.00</cbc:TaxAmount>
+    <cac:TaxSubtotal><cbc:TaxableAmount currencyID="EUR">2100.00</cbc:TaxableAmount>
+      <cbc:TaxAmount currencyID="EUR">399.00</cbc:TaxAmount>
+      <cac:TaxCategory><cbc:ID>S</cbc:ID><cbc:Percent>19.00</cbc:Percent></cac:TaxCategory></cac:TaxSubtotal>
+  </cac:TaxTotal>
+  <cac:LegalMonetaryTotal><cbc:LineExtensionAmount currencyID="EUR">2100.00</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="EUR">2100.00</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="EUR">2499.00</cbc:TaxInclusiveAmount>
+    <cbc:PayableAmount currencyID="EUR">2499.00</cbc:PayableAmount></cac:LegalMonetaryTotal>
+  <cac:InvoiceLine><cbc:ID>1</cbc:ID><cbc:InvoicedQuantity unitCode="C62">30</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">1500.00</cbc:LineExtensionAmount>
+    <cac:Item><cbc:Name>Pallet transport Hamburg-Brussels</cbc:Name>
+      <cac:ClassifiedTaxCategory><cbc:Percent>19.00</cbc:Percent></cac:ClassifiedTaxCategory></cac:Item>
+    <cac:Price><cbc:PriceAmount currencyID="EUR">50.00</cbc:PriceAmount></cac:Price></cac:InvoiceLine>
+  <cac:InvoiceLine><cbc:ID>2</cbc:ID><cbc:InvoicedQuantity unitCode="HUR">12</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">600.00</cbc:LineExtensionAmount>
+    <cac:Item><cbc:Name>Loading and handling</cbc:Name><cbc:Description>Warehouse crew, per hour</cbc:Description>
+      <cac:ClassifiedTaxCategory><cbc:Percent>19.00</cbc:Percent></cac:ClassifiedTaxCategory></cac:Item>
+    <cac:Price><cbc:PriceAmount currencyID="EUR">50.00</cbc:PriceAmount></cac:Price></cac:InvoiceLine>
+</Invoice>

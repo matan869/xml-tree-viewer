@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+  xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+  xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+ <rsm:ExchangedDocument><ram:ID>RE-2026-771</ram:ID>
+   <ram:IssueDateTime><udt:DateTimeString format="102">20260810</udt:DateTimeString></ram:IssueDateTime>
+   <ram:IncludedNote><ram:Content>Leistungszeitraum August 2026</ram:Content></ram:IncludedNote></rsm:ExchangedDocument>
+ <rsm:SupplyChainTradeTransaction>
+  <ram:IncludedSupplyChainTradeLineItem>
+    <ram:AssociatedDocumentLineDocument><ram:LineID>1</ram:LineID></ram:AssociatedDocumentLineDocument>
+    <ram:SpecifiedTradeProduct><ram:Name>Beratungsleistung</ram:Name></ram:SpecifiedTradeProduct>
+    <ram:SpecifiedLineTradeAgreement><ram:NetPriceProductTradePrice><ram:ChargeAmount>120.00</ram:ChargeAmount></ram:NetPriceProductTradePrice></ram:SpecifiedLineTradeAgreement>
+    <ram:SpecifiedLineTradeDelivery><ram:BilledQuantity unitCode="HUR">8</ram:BilledQuantity></ram:SpecifiedLineTradeDelivery>
+    <ram:SpecifiedLineTradeSettlement>
+      <ram:ApplicableTradeTax><ram:RateApplicablePercent>19.00</ram:RateApplicablePercent></ram:ApplicableTradeTax>
+      <ram:SpecifiedTradeSettlementLineMonetarySummation><ram:LineTotalAmount>960.00</ram:LineTotalAmount></ram:SpecifiedTradeSettlementLineMonetarySummation>
+    </ram:SpecifiedLineTradeSettlement></ram:IncludedSupplyChainTradeLineItem>
+  <ram:ApplicableHeaderTradeAgreement>
+    <ram:BuyerReference>04011000-12345-34</ram:BuyerReference>
+    <ram:SellerTradeParty><ram:Name>Consultix GmbH</ram:Name>
+      <ram:PostalTradeAddress><ram:LineOne>Alexanderplatz 1</ram:LineOne><ram:CityName>Berlin</ram:CityName>
+        <ram:PostcodeCode>10178</ram:PostcodeCode><ram:CountryID>DE</ram:CountryID></ram:PostalTradeAddress>
+      <ram:SpecifiedTaxRegistration><ram:ID schemeID="VA">DE123456789</ram:ID></ram:SpecifiedTaxRegistration></ram:SellerTradeParty>
+    <ram:BuyerTradeParty><ram:Name>Stadtwerke Musterstadt</ram:Name>
+      <ram:PostalTradeAddress><ram:CityName>Musterstadt</ram:CityName><ram:CountryID>DE</ram:CountryID></ram:PostalTradeAddress></ram:BuyerTradeParty>
+  </ram:ApplicableHeaderTradeAgreement>
+  <ram:ApplicableHeaderTradeSettlement>
+    <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+    <ram:SpecifiedTradeSettlementPaymentMeans>
+      <ram:PayeePartyCreditorFinancialAccount><ram:IBANID>DE02120300000000202051</ram:IBANID></ram:PayeePartyCreditorFinancialAccount></ram:SpecifiedTradeSettlementPaymentMeans>
+    <ram:ApplicableTradeTax><ram:CalculatedAmount>182.40</ram:CalculatedAmount><ram:BasisAmount>960.00</ram:BasisAmount>
+      <ram:CategoryCode>S</ram:CategoryCode><ram:RateApplicablePercent>19.00</ram:RateApplicablePercent></ram:ApplicableTradeTax>
+    <ram:SpecifiedTradePaymentTerms><ram:Description>Zahlbar innerhalb 14 Tagen</ram:Description>
+      <ram:DueDateDateTime><udt:DateTimeString format="102">20260824</udt:DateTimeString></ram:DueDateDateTime></ram:SpecifiedTradePaymentTerms>
+    <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+      <ram:LineTotalAmount>960.00</ram:LineTotalAmount><ram:TaxBasisTotalAmount>960.00</ram:TaxBasisTotalAmount>
+      <ram:TaxTotalAmount currencyID="EUR">182.40</ram:TaxTotalAmount><ram:GrandTotalAmount>1142.40</ram:GrandTotalAmount>
+      <ram:DuePayableAmount>1142.40</ram:DuePayableAmount></ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+  </ram:ApplicableHeaderTradeSettlement>
+ </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>

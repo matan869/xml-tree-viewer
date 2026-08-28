@@ -85,6 +85,42 @@
 .xv-chip { display:inline-block; background:var(--xv-badge); color:var(--xv-badge-fg);
   border-radius:6px; padding:2px 8px; margin:0 5px 5px 0; font:11.5px system-ui,sans-serif; cursor:pointer; }
 .xv-chip:hover { background:var(--xv-accent); color:#fff; }
+.xv-doc { max-width:920px; margin:0 auto 60px; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+.xv-doc-head { display:flex; justify-content:space-between; align-items:flex-start; gap:24px;
+  border-bottom:2px solid var(--xv-line); padding-bottom:14px; margin-bottom:20px; flex-wrap:wrap; }
+.xv-doc-kind { font-size:24px; font-weight:700; letter-spacing:-.01em; }
+.xv-doc-fmt { color:var(--xv-dim); font-size:12px; margin-top:3px; }
+.xv-doc-no { text-align:right; font-size:13px; }
+.xv-doc-no b { font-size:17px; }
+.xv-parties { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:22px; }
+@media (max-width:700px){ .xv-parties { grid-template-columns:1fr; } }
+.xv-pcard { border:1px solid var(--xv-line); border-radius:10px; padding:12px 14px; }
+.xv-plabel { font-size:10.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--xv-dim); margin-bottom:5px; }
+.xv-pname { font-weight:650; font-size:14px; margin-bottom:3px; }
+.xv-pline { font-size:12.5px; color:var(--xv-dim); line-height:1.5; }
+.xv-meta { display:flex; gap:22px; flex-wrap:wrap; margin-bottom:18px; font-size:12.5px; }
+.xv-meta div span { color:var(--xv-dim); display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; }
+.xv-tbl { display:grid; font-size:12.5px; margin-bottom:16px; }
+.xv-tbl > div { padding:7px 8px; border-bottom:1px solid var(--xv-line); overflow-wrap:anywhere;
+  min-width:0; align-self:stretch; }
+.xv-tbl > div.h { border-bottom:2px solid var(--xv-line); font-size:11px; text-transform:uppercase;
+  letter-spacing:.05em; color:var(--xv-dim); }
+.xv-tbl > div.n { text-align:right; font-variant-numeric:tabular-nums; }
+.xv-tbl > div.sub { color:var(--xv-dim); font-size:11.5px; padding-top:0; border-top:none; }
+.xv-sums { display:grid; grid-template-columns:1fr auto; width:340px; max-width:100%; margin-left:auto;
+  font-size:12.5px; margin-bottom:8px; }
+.xv-sums > div { padding:4px 8px; }
+.xv-sums > div.n { text-align:right; font-variant-numeric:tabular-nums; }
+.xv-sums > div.grand { border-top:2px solid var(--xv-line); font-weight:700; font-size:15px; padding-top:9px; }
+.xv-pay { border:1px solid var(--xv-line); border-radius:10px; padding:12px 14px; margin-top:18px; font-size:12.5px; }
+.xv-pay code { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:12.5px; }
+.xv-balrow { display:flex; gap:26px; flex-wrap:wrap; margin-bottom:18px; }
+.xv-bal { border:1px solid var(--xv-line); border-radius:10px; padding:10px 16px; }
+.xv-bal span { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--xv-dim); }
+.xv-bal b { font-size:17px; font-variant-numeric:tabular-nums; }
+.xv-cr { color:#047857; } .xv-dr { color:#b91c1c; }
+.xv-root[data-xv-theme="dark"] .xv-cr { color:#6ee7b7; }
+.xv-root[data-xv-theme="dark"] .xv-dr { color:#fca5a5; }
 .xv-olist { font-size:12.5px; }
 .xv-orow { display:flex; gap:10px; padding:3px 6px; border-radius:5px; cursor:pointer; align-items:baseline; }
 .xv-orow:hover { background:var(--xv-hover); }
@@ -93,6 +129,16 @@
   padding:0 7px; font:10.5px system-ui,sans-serif; }
 .xv-osample { color:var(--xv-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 @media (max-width:760px){ .xv-xpath{width:140px} .xv-search{width:110px} }
+@media print {
+  .xv-bar, .xv-status, .xv-toast { display:none !important; }
+  .xv-root { position:static; color:#000; background:#fff; }
+  .xv-main { overflow:visible; padding:0; }
+  .xv-doc { max-width:none; }
+  .xv-pcard, .xv-pay, .xv-bal { border-color:#bbb; }
+  .xv-tbl > div, .xv-sums > div { border-color:#ccc; }
+  .xv-doc-kind, .xv-pname { color:#000; }
+  .xv-pcard, .xv-pay, .xv-tbl > div { break-inside:avoid; }
+}
 `;
 
   function el(doc, tag, cls, text) {
@@ -135,8 +181,11 @@
     bar.appendChild(xpath); bar.appendChild(xpathBtn);
     bar.appendChild(el(doc, "div", "xv-sep"));
 
-    const tableBtn = btn("Table"), jsonBtn = btn("JSON"), outlineBtn = btn("Structure");
-    [tableBtn, jsonBtn, outlineBtn].forEach((b) => bar.appendChild(b));
+    const docBtn = btn("Document"), tableBtn = btn("Table"), jsonBtn = btn("JSON"), outlineBtn = btn("Structure");
+    docBtn.style.display = "none";
+    const printBtn = btn("Print / PDF");
+    printBtn.style.display = "none";
+    [docBtn, printBtn, tableBtn, jsonBtn, outlineBtn].forEach((b) => bar.appendChild(b));
     bar.appendChild(el(doc, "div", "xv-sep"));
     const expandBtn = btn("Expand all"), collapseBtn = btn("Collapse all"),
       rawBtn = btn("Raw"), copyBtn = btn("Copy"), dlBtn = btn("Download"), themeBtn = btn("◐");
@@ -204,6 +253,7 @@
       renderRaw(xmlText, loc);
       rawBtn.style.display = expandBtn.style.display = collapseBtn.style.display = "none";
       tableBtn.style.display = jsonBtn.style.display = outlineBtn.style.display = "none";
+      docBtn.style.display = printBtn.style.display = "none";
       xpath.disabled = search.disabled = true;
       stats.textContent = XMLV.formatBytes(xmlText.length);
       wireCopyDownload(xmlText);
@@ -564,6 +614,251 @@
     xpath.addEventListener("keydown", (e) => { if (e.key === "Enter") runXPath(); });
     xpathBtn.addEventListener("click", runXPath);
 
+    // ---------- business-document view (e-invoices, bank statements) ----------
+    const business = XMLV.readDocument ? XMLV.readDocument(parsed) : null;
+
+    function money(v, cur) {
+      if (v === undefined || v === null || v === "") return "";
+      const n = Number(String(v).replace(",", "."));
+      if (!isFinite(n)) return String(v);
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: cur ? "currency" : "decimal", currency: cur || undefined,
+          minimumFractionDigits: 2, maximumFractionDigits: 2,
+        }).format(n);
+      } catch (e) { return n.toFixed(2) + (cur ? " " + cur : ""); }
+    }
+    function niceDate(v) {
+      if (!v) return "";
+      const m = /^(\d{4})-?(\d{2})-?(\d{2})/.exec(String(v));
+      if (!m) return String(v);
+      try {
+        return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]))
+          .toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+      } catch (e) { return m[1] + "-" + m[2] + "-" + m[3]; }
+    }
+    function field(label, value) {
+      if (!value) return null;
+      const d = el(doc, "div");
+      d.appendChild(el(doc, "span", null, label));
+      const b = el(doc, "bdi", null, value);   // values may be Hebrew/Arabic
+      b.setAttribute("dir", "auto");
+      d.appendChild(b);
+      return d;
+    }
+    function partyCard(label, p) {
+      const c = el(doc, "div", "xv-pcard");
+      c.appendChild(el(doc, "div", "xv-plabel", label));
+      const nm = el(doc, "div", "xv-pname");
+      const bdi = el(doc, "bdi", null, p.name || "—");
+      bdi.setAttribute("dir", "auto");
+      nm.appendChild(bdi);
+      c.appendChild(nm);
+      for (const line of [p.vat, p.address, p.contact]) {
+        if (line) {
+          const l = el(doc, "div", "xv-pline");
+          const b = el(doc, "bdi", null, line);
+          b.setAttribute("dir", "auto");
+          l.appendChild(b);
+          c.appendChild(l);
+        }
+      }
+      return c;
+    }
+    /** One grid cell holding a bidi-isolated value (data may be Hebrew/Arabic). */
+    function gcell(host, text, cls) {
+      const d = el(doc, "div", cls || null);
+      const b = el(doc, "bdi", null, text == null ? "" : String(text));
+      b.setAttribute("dir", "auto");
+      d.appendChild(b);
+      host.appendChild(d);
+      return d;
+    }
+    function grid(cols) {
+      const g = el(doc, "div", "xv-tbl");
+      g.setAttribute("role", "table");
+      g.style.gridTemplateColumns = cols;
+      return g;
+    }
+    function headers(g, defs) {
+      for (const [label, cls] of defs) gcell(g, label, "h" + (cls ? " " + cls : ""));
+    }
+
+    function renderInvoice(d, host) {
+      const cur = d.currency;
+      const head = el(doc, "div", "xv-doc-head");
+      const left = el(doc, "div");
+      left.appendChild(el(doc, "div", "xv-doc-kind", d.kind));
+      left.appendChild(el(doc, "div", "xv-doc-fmt", d.format));
+      const right = el(doc, "div", "xv-doc-no");
+      const nb = el(doc, "div");
+      nb.appendChild(el(doc, "b", null, d.number || "—"));
+      right.appendChild(nb);
+      if (d.issued) right.appendChild(el(doc, "div", "xv-pline", "Issued " + niceDate(d.issued)));
+      if (d.due) right.appendChild(el(doc, "div", "xv-pline", "Due " + niceDate(d.due)));
+      head.appendChild(left); head.appendChild(right);
+      host.appendChild(head);
+
+      const parties = el(doc, "div", "xv-parties");
+      parties.appendChild(partyCard("From (supplier)", d.seller || {}));
+      parties.appendChild(partyCard("To (customer)", d.buyer || {}));
+      host.appendChild(parties);
+
+      const meta = el(doc, "div", "xv-meta");
+      for (const [l, v] of [["Currency", cur], ["Buyer reference", d.buyerRef], ["Note", d.note]]) {
+        const f = field(l, v); if (f) meta.appendChild(f);
+      }
+      if (meta.children.length) host.appendChild(meta);
+
+      if (d.lines && d.lines.length) {
+        const g = grid("46px minmax(160px,1fr) 92px 116px 74px 122px");
+        headers(g, [["#"], ["Description"], ["Qty", "n"], ["Unit price", "n"],
+                    ["VAT %", "n"], ["Line total", "n"]]);
+        for (const l of d.lines) {
+          gcell(g, l.id);
+          const desc = gcell(g, l.name);
+          if (l.note && l.note !== l.name) {
+            const small = el(doc, "div", "xv-pline");
+            const b = el(doc, "bdi", null, l.note); b.setAttribute("dir", "auto");
+            small.appendChild(b); desc.appendChild(small);
+          }
+          gcell(g, [l.qty, l.unit].filter(Boolean).join(" "), "n");
+          gcell(g, money(l.price, cur), "n");
+          gcell(g, l.vat ? l.vat + "%" : "", "n");
+          gcell(g, money(l.total, cur), "n");
+        }
+        host.appendChild(g);
+      }
+
+      if (d.taxes && d.taxes.length) {
+        const g = grid("110px minmax(120px,1fr) 150px 150px");
+        headers(g, [["VAT rate"], ["Category"], ["Taxable amount", "n"], ["VAT amount", "n"]]);
+        for (const t2 of d.taxes) {
+          gcell(g, t2.rate ? t2.rate + "%" : "");
+          gcell(g, t2.code || "");
+          gcell(g, money(t2.base, cur), "n");
+          gcell(g, money(t2.tax, cur), "n");
+        }
+        host.appendChild(g);
+      }
+
+      const T = d.totals || {};
+      const sums = el(doc, "div", "xv-sums");
+      const rows = [["Net total", T.net], ["Taxable amount", T.taxExclusive],
+                    ["VAT", T.tax], ["Gross total", T.taxInclusive], ["Prepaid", T.prepaid]];
+      let any = false;
+      for (const [l, v] of rows) {
+        if (!v) continue;
+        any = true;
+        gcell(sums, l); gcell(sums, money(v, cur), "n");
+      }
+      if (T.payable) {
+        any = true;
+        gcell(sums, "Amount due", "grand"); gcell(sums, money(T.payable, cur), "n grand");
+      }
+      if (any) host.appendChild(sums);
+
+      const P = d.payment || {};
+      if (P.iban || P.reference || P.terms) {
+        const pay = el(doc, "div", "xv-pay");
+        pay.appendChild(el(doc, "div", "xv-plabel", "Payment"));
+        if (P.iban) {
+          const r2 = el(doc, "div");
+          r2.appendChild(el(doc, "span", null, "IBAN "));
+          r2.appendChild(el(doc, "code", null, P.iban));
+          if (P.bic) { r2.appendChild(el(doc, "span", null, "  BIC ")); r2.appendChild(el(doc, "code", null, P.bic)); }
+          pay.appendChild(r2);
+        }
+        if (P.reference) pay.appendChild(el(doc, "div", null, "Reference: " + P.reference));
+        if (P.terms) pay.appendChild(el(doc, "div", "xv-pline", P.terms));
+        host.appendChild(pay);
+      }
+    }
+
+    function renderStatement(d, host) {
+      const cur = d.currency;
+      const head = el(doc, "div", "xv-doc-head");
+      const left = el(doc, "div");
+      left.appendChild(el(doc, "div", "xv-doc-kind", d.kind));
+      left.appendChild(el(doc, "div", "xv-doc-fmt", d.format));
+      const right = el(doc, "div", "xv-doc-no");
+      if (d.account) { const a = el(doc, "div"); a.appendChild(el(doc, "b", null, d.account)); right.appendChild(a); }
+      if (d.bank) right.appendChild(el(doc, "div", "xv-pline", d.bank));
+      if (d.from || d.to) right.appendChild(el(doc, "div", "xv-pline",
+        niceDate(d.from) + " → " + niceDate(d.to)));
+      head.appendChild(left); head.appendChild(right);
+      host.appendChild(head);
+
+      const bal = el(doc, "div", "xv-balrow");
+      const LABEL = { OPBD: "Opening balance", CLBD: "Closing balance", PRCD: "Previous closing",
+                      CLAV: "Closing available", ITBD: "Interim balance", FWAV: "Forward available" };
+      for (const b of d.balances || []) {
+        const c = el(doc, "div", "xv-bal");
+        c.appendChild(el(doc, "span", null, (LABEL[b.type] || b.type || "Balance") +
+          (b.date ? " · " + niceDate(b.date) : "")));
+        const amt = (b.sign === "DBIT" ? "-" : "") + b.amount;
+        c.appendChild(el(doc, "b", b.sign === "DBIT" ? "xv-dr" : null, money(amt, b.currency || cur)));
+        bal.appendChild(c);
+      }
+      if (bal.children.length) host.appendChild(bal);
+
+      const entries = d.entries || [];
+      const meta = el(doc, "div", "xv-meta");
+      const credits = entries.filter((e) => e.sign !== "DBIT").reduce((a, e) => a + (parseFloat(e.amount) || 0), 0);
+      const debits = entries.filter((e) => e.sign === "DBIT").reduce((a, e) => a + (parseFloat(e.amount) || 0), 0);
+      [["Transactions", String(entries.length)], ["Money in", money(credits, cur)],
+       ["Money out", money(debits, cur)], ["Statement id", d.id]].forEach(([l, v]) => {
+        const f = field(l, v); if (f) meta.appendChild(f);
+      });
+      host.appendChild(meta);
+
+      const g = grid("104px 104px minmax(120px,1fr) minmax(140px,1.4fr) 118px 126px");
+      headers(g, [["Booked"], ["Value"], ["Counterparty"], ["Details"], ["Reference"], ["Amount", "n"]]);
+      for (const e of entries) {
+        gcell(g, niceDate(e.booked));
+        gcell(g, niceDate(e.value));
+        gcell(g, e.counterparty);
+        gcell(g, e.remittance);
+        gcell(g, e.reference);
+        gcell(g, money(e.signed, e.currency || cur), "n " + (e.sign === "DBIT" ? "xv-dr" : "xv-cr"));
+      }
+      host.appendChild(g);
+
+      const csvBtn = el(doc, "button", "xv-btn", "Download statement CSV");
+      csvBtn.addEventListener("click", () => {
+        const cols = ["Booked", "Value", "Counterparty", "Details", "Reference", "Amount", "Currency"];
+        const rows = entries.map((e) => [e.booked, e.value, e.counterparty, e.remittance,
+                                         e.reference, e.signed, e.currency || cur]);
+        const a = el(doc, "a");
+        a.setAttribute("download", (opts.filename || "statement") + ".csv");
+        a.setAttribute("href", "data:text/csv;charset=utf-8,%EF%BB%BF" +
+          encodeURIComponent(XMLV.toCsv(cols, rows)));
+        host.appendChild(a); a.click(); a.remove();
+        say("Statement CSV downloaded");
+      });
+      host.appendChild(csvBtn);
+    }
+
+    function renderDocument() {
+      clearPanel();
+      const host = el(doc, "div", "xv-doc");
+      if (business.type === "camt053") renderStatement(business, host);
+      else renderInvoice(business, host);
+      panel.appendChild(host);
+      showView("doc");
+    }
+
+    if (business) {
+      docBtn.style.display = "";
+      docBtn.addEventListener("click", () => {
+        if (activeView === "doc") { showView("tree"); return; }
+        renderDocument();
+      });
+      printBtn.addEventListener("click", () => root.print());
+      // Somebody opening an e-invoice wants the invoice, not the tags.
+      setTimeout(renderDocument, 0);
+    }
+
     // ---------- panels: Table / JSON / Structure ----------
     let activeView = "tree";
     function showView(v) {
@@ -571,9 +866,11 @@
       tree.style.display = v === "tree" ? "" : "none";
       raw.style.display = v === "raw" ? "block" : "none";
       panel.style.display = v === "tree" || v === "raw" ? "none" : "block";
-      for (const [b, name] of [[rawBtn, "raw"], [tableBtn, "table"], [jsonBtn, "json"], [outlineBtn, "outline"]]) {
+      for (const [b, name] of [[rawBtn, "raw"], [tableBtn, "table"], [jsonBtn, "json"],
+                               [outlineBtn, "outline"], [docBtn, "doc"]]) {
         b.setAttribute("data-on", v === name ? "1" : "0");
       }
+      printBtn.style.display = v === "doc" ? "" : "none";
     }
     function clearPanel() { while (panel.firstChild) panel.removeChild(panel.firstChild); }
 
