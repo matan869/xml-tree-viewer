@@ -1,11 +1,10 @@
 # Chrome Web Store listing — XML Viewer & Formatter
 
 ## Name (45 max)
-XML Viewer & Formatter – Tree, XPath
+XML Viewer & Formatter: Tree, Table, JSON
 
 ## Summary (132 max)
-XML as a collapsible tree, a sortable table, or JSON. XPath, CSV export, pretty print, dark mode. Offline, free, no tracking.
-
+View, format and read XML instantly: collapsible tree, sortable table, XML to JSON, CSV export, XPath, dark mode. Free, offline.
 ## Category
 Developer Tools
 
@@ -47,10 +46,14 @@ This extension makes zero network requests. It cannot show you a popup on a shop
 Do not take our word for it — the entire source code is public:
 https://github.com/matan869/xml-tree-viewer
 
+ALSO SEARCHED FOR AS
+xml reader, xml beautifier, xml pretty print, xml tree viewer, xml table viewer, view xml as table, xml to json converter, xml to csv, xml to excel, open xml file in chrome, view xml file in a readable format.
+
 WORKS WITH
 RSS and Atom feeds, sitemaps, SOAP and WSDL, XSD schemas, GPX, KML, plist, OPML, and e-invoice formats including UBL, FatturaPA, XRechnung and Peppol.
 
 Free forever, MIT licensed. If it saves you time, a rating helps other people find it.
+
 
 ## Privacy policy URL
 https://github.com/matan869/xml-tree-viewer/blob/master/PRIVACY.md

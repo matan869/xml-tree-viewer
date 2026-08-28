@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "XML Viewer & Formatter – Tree, XPath",
-  "version": "1.1.0",
-  "description": "XML as a collapsible tree, sortable table or JSON. XPath, CSV export, pretty print, dark mode. Offline, free, no tracking.",
+  "name": "XML Viewer & Formatter: Tree, Table, JSON",
+  "version": "1.1.1",
+  "description": "View, format and read XML instantly: collapsible tree, sortable table, XML to JSON, CSV export, XPath, dark mode. Free, offline.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
