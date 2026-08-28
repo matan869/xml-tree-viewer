@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sample product catalog -->
+<catalog xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>ACME Store — product feed</title>
+    <link>https://example.com</link>
+    <lastBuildDate>2026-08-28T10:15:00Z</lastBuildDate>
+  </channel>
+  <item id="SKU-1001" available="true">
+    <g:title>Wireless Mouse Pro</g:title>
+    <g:price currency="USD">29.99</g:price>
+    <g:brand>ACME</g:brand>
+    <description><![CDATA[Ergonomic 2.4GHz mouse with <b>silent</b> clicks]]></description>
+    <tags><tag>peripherals</tag><tag>wireless</tag><tag>sale</tag></tags>
+  </item>
+  <item id="SKU-1002" available="false">
+    <g:title>Mechanical Keyboard TKL</g:title>
+    <g:price currency="USD">89.00</g:price>
+    <g:brand>KeyWorks</g:brand>
+    <stock warehouse="EU-1">0</stock>
+    <stock warehouse="US-2">14</stock>
+  </item>
+  <item id="SKU-1003" available="true">
+    <g:title>USB-C Hub 7-in-1</g:title>
+    <g:price currency="EUR">45.50</g:price>
+    <dimensions unit="mm"><w>112</w><h>15</h><d>48</d></dimensions>
+  </item>
+</catalog>

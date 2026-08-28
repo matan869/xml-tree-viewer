@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XML Viewer & Formatter</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin:0; font:14px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:#f1f5f9; color:#0f172a; }
+  @media (prefers-color-scheme: dark){ body { background:#0b1120; color:#e2e8f0; } }
+  .card { max-width:660px; margin:9vh auto 0; padding:34px 38px; border-radius:16px;
+    background:#fff; box-shadow:0 8px 30px rgba(2,6,23,.08); }
+  @media (prefers-color-scheme: dark){ .card { background:#111c34; box-shadow:0 8px 30px rgba(0,0,0,.5);} }
+  h1 { margin:0 0 4px; font-size:22px; }
+  h1 .logo { color:#2563eb; }
+  p.sub { margin:0 0 22px; color:#64748b; }
+  .drop { border:2px dashed #94a3b8; border-radius:12px; padding:34px; text-align:center;
+    color:#64748b; cursor:pointer; transition:.15s; }
+  .drop:hover, .drop.over { border-color:#2563eb; color:#2563eb; background:rgba(37,99,235,.05); }
+  textarea { width:100%; box-sizing:border-box; height:150px; margin-top:16px; border-radius:10px;
+    border:1px solid #cbd5e1; padding:12px; font:12.5px ui-monospace,Menlo,Consolas,monospace;
+    background:inherit; color:inherit; resize:vertical; }
+  textarea:focus { outline:none; border-color:#2563eb; }
+  .row { display:flex; gap:10px; margin-top:14px; align-items:center; }
+  button.go { background:#2563eb; border:none; color:#fff; font-size:14px; font-weight:600;
+    padding:10px 22px; border-radius:10px; cursor:pointer; }
+  button.go:hover { background:#1d4ed8; }
+  .hint { color:#94a3b8; font-size:12px; }
+  input[type=file]{ display:none; }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <h1><span class="logo">&lt;/&gt;</span> XML Viewer &amp; Formatter</h1>
+  <p class="sub">Collapsible tree · XPath search · pretty print · works offline, nothing is uploaded.</p>
+  <div class="drop" id="drop">Drop an XML file here, or click to choose</div>
+  <input type="file" id="file" accept=".xml,.rss,.atom,.xsd,.xsl,.xslt,.wsdl,.gpx,.kml,.plist,.svg,.opml,.config,.xliff,text/xml,application/xml">
+  <textarea id="paste" placeholder="…or paste XML here" spellcheck="false"></textarea>
+  <div class="row">
+    <button class="go" id="go">View</button>
+    <span class="hint">Tip: XML files you open from the web or disk are rendered automatically.</span>
+  </div>
+</div>
+<script src="src/xml.js"></script>
+<script src="src/tree.js"></script>
+<script src="src/viewer.js"></script>
+</body>
+</html>

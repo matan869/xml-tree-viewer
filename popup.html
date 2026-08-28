@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  body { width:280px; margin:0; font:13px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:#fff; color:#0f172a; }
+  @media (prefers-color-scheme: dark){ body { background:#0f172a; color:#e2e8f0; } }
+  .head { display:flex; align-items:center; gap:8px; padding:12px 14px 8px; font-weight:700; }
+  .head .logo { color:#2563eb; font-weight:800; }
+  .btn { display:block; width:calc(100% - 28px); margin:6px 14px; padding:9px 12px; border-radius:9px;
+    border:1px solid #cbd5e1; background:transparent; color:inherit; font-size:13px; text-align:left; cursor:pointer; }
+  .btn:hover { border-color:#2563eb; color:#2563eb; }
+  .btn.primary { background:#2563eb; border-color:#2563eb; color:#fff; font-weight:600; }
+  .btn.primary:hover { background:#1d4ed8; }
+  .sec { margin:10px 14px 4px; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#94a3b8; }
+  select { width:calc(100% - 28px); margin:4px 14px 10px; padding:6px; border-radius:8px;
+    border:1px solid #cbd5e1; background:inherit; color:inherit; }
+  .foot { padding:8px 14px 12px; font-size:11px; color:#94a3b8; }
+  .foot a { color:#2563eb; text-decoration:none; }
+  #fileNote { display:none; margin:2px 14px 8px; font-size:11.5px; color:#b45309; }
+</style>
+</head>
+<body>
+<div class="head"><span class="logo">&lt;/&gt;</span> XML Viewer &amp; Formatter</div>
+<button class="btn primary" id="open">Open / paste an XML file…</button>
+<button class="btn" id="fileAccess">Enable viewing local files (file://)</button>
+<div id="fileNote">On the page that opens, turn on “Allow access to file URLs”.</div>
+<div class="sec">Theme</div>
+<select id="theme">
+  <option value="auto">Auto (follow system)</option>
+  <option value="light">Light</option>
+  <option value="dark">Dark</option>
+</select>
+<div class="foot">Free &amp; open source · nothing leaves your browser<br>
+<a href="https://github.com/matan869/xml-tree-viewer" target="_blank">Source &amp; issues on GitHub</a></div>
+<script src="src/popup.js"></script>
+</body>
+</html>
