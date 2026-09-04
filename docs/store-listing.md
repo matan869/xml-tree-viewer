@@ -14,7 +14,7 @@ Most XML extensions make you open a popup and paste your file in — then show y
 
 ★ IT OPENS E-INVOICES AS ACTUAL INVOICES
 Received an XML invoice you cannot read? Since the EU e-invoicing mandates (Germany 2025, Belgium and Poland 2026, France 2026-2027, Italy FatturaPA) millions of people get sent structured XML instead of a PDF. This extension recognises the format and lays it out as a normal invoice: supplier and customer, line items, VAT breakdown, totals, IBAN and payment terms — with a Print / Save as PDF button.
-Supported: UBL 2.1 and Peppol BIS (EN 16931), XRechnung and ZUGFeRD / Factur-X (UN/CEFACT CII), FatturaPA, KSeF.
+It reads the UBL 2.1, Peppol BIS (EN 16931), XRechnung, ZUGFeRD / Factur-X and FatturaPA layouts.
 
 ★ IT OPENS BANK STATEMENTS TOO
 ISO 20022 camt.053 and camt.052 become a readable statement: opening and closing balance, money in, money out, and every transaction with counterparty, reference and date — exportable to CSV for your accounting software.
@@ -46,12 +46,6 @@ This extension makes zero network requests. Your invoices and bank statements ne
 
 Do not take our word for it — the entire source code is public:
 https://github.com/matan869/xml-tree-viewer
-
-TYPICAL USES
-Reading an XML file in a readable format instead of raw text. Pretty-printing and beautifying XML. Converting XML to JSON, to CSV or to Excel. Inspecting an RSS feed, a sitemap or a SOAP response. Opening a UBL or Peppol invoice, an XRechnung or ZUGFeRD invoice, a FatturaPA or KSeF invoice, or a camt.053 bank statement, and exporting it to CSV.
-
-WORKS WITH
-RSS and Atom feeds, sitemaps, SOAP and WSDL, XSD schemas, GPX, KML, plist, OPML, e-invoices (UBL, FatturaPA, XRechnung, ZUGFeRD, Peppol) and ISO 20022 bank statements.
 
 Free forever, MIT licensed. If it saves you time, a rating helps other people find it.
 
