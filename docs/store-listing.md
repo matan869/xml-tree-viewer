@@ -53,13 +53,22 @@ Free and open source (MIT). If it saves you time, a rating helps other people fi
 ## Privacy policy URL
 https://github.com/matan869/xml-tree-viewer/blob/master/PRIVACY.md
 
-## Single purpose description
-Display raw JSON and XML documents (from the web or local files) as a readable, collapsible, searchable tree, with formatting tools.
+## Single purpose description (console Privacy tab, 1,000 chars max)
+Render raw JSON and XML documents as a readable, collapsible, searchable tree with formatting tools (pretty print, search, table view, CSV export, XPath for XML). The extension does one thing: it makes the raw data documents (JSON and XML) that the user opens in the browser readable. It has no other function.
 
-## Permission justifications
-- storage: Saves two preferences locally: the theme (auto/light/dark) and whether JSON pages are formatted automatically.
-- Host access (*://*/*, file:///*): The content script must run on any URL to detect whether the response is a raw JSON or XML document; it renders only those and leaves every other page untouched. No data is read from other pages and nothing is transmitted anywhere.
-- Remote code: none. All code is packaged.
+## Permission justifications (console Privacy tab, 1,000 chars max each — the field silently cuts the rest)
+### storage
+chrome.storage.sync is used to persist exactly two user preferences: the viewer's theme setting (auto, light or dark) and whether raw JSON pages are formatted automatically (on or off), so they are remembered between sessions and across the user's own signed-in Chrome profiles. No document content, no browsing data and no identifiers are ever written to storage.
+
+### Host permission (*://*/*, file:///*)
+The extension's purpose is to render raw JSON and XML documents wherever the user opens them, and both are served from any origin (API responses, feeds, sitemaps, configuration files, SOAP endpoints, e-invoices) and from local file:// paths. Chrome does not expose the response Content-Type before a content script runs, so the script must run on any URL to check document.contentType and decide whether the document is raw JSON or raw XML.
+
+On any other page the content script does nothing: it reads document.contentType (and, for a plain-text response shown as one block of text, whether that text is valid JSON), returns immediately and never touches the DOM. HTML pages, SVG images and XSLT-styled XML are explicitly left untouched (covered by automated tests).
+
+No page data is ever collected, stored or transmitted. The extension makes no network requests whatsoever. All source code is public at https://github.com/matan869/xml-tree-viewer
+
+### Remote code
+None. All code is packaged.
 
 ## Data usage disclosures
 Collects nothing. All checkboxes "No". Certify no data collected/transferred.
