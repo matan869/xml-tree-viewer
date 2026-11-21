@@ -244,9 +244,14 @@
     const perr = parsed.querySelector ? parsed.querySelector("parsererror") : null;
 
     if (perr) {
-      const msg = (perr.textContent || "XML parse error").replace(/\s+/g, " ").trim().slice(0, 400);
+      // Chrome wraps the parser's message in "This page contains the following
+      // errors: … Below is a rendering of the page up to the first error." Keep the message.
+      const msg = (perr.textContent || "XML parse error").replace(/\s+/g, " ").trim()
+        .replace(/^This page contains the following errors:\s*/i, "")
+        .replace(/\s*Below is a rendering of the page up to the first error\.?$/i, "");
       const loc = XMLV.parseErrorLocation(msg);
-      errBox.textContent = "⚠ " + msg;
+      const m = /^error on line (\d+) at column (\d+):\s*([\s\S]*)$/i.exec(msg);
+      errBox.textContent = "⚠ Invalid XML: " + (m ? m[3] + " (line " + m[1] + ", column " + m[2] + ")" : msg).slice(0, 400);
       errBox.style.display = "";
       tree.style.display = "none";
       raw.style.display = "block";
@@ -456,10 +461,14 @@
       const frag = doc.createDocumentFragment();
       const MAXL = 80000;
       for (let i = 0; i < lines.length && i < MAXL; i++) {
-        const row = el(doc, "span", errLoc && errLoc.line === i + 1 ? "xv-errline" : null);
+        // The error row is an inline-block: its line break must sit OUTSIDE it,
+        // or the next line is laid out to the right of the row, off screen.
+        const isErr = !!(errLoc && errLoc.line === i + 1);
+        const row = el(doc, "span", isErr ? "xv-errline" : null);
         row.appendChild(el(doc, "span", "xv-ln", String(i + 1)));
-        row.appendChild(doc.createTextNode(lines[i] + "\n"));
+        row.appendChild(doc.createTextNode(isErr ? lines[i] : lines[i] + "\n"));
         frag.appendChild(row);
+        if (isErr) frag.appendChild(doc.createTextNode("\n"));
       }
       if (lines.length > MAXL) frag.appendChild(doc.createTextNode("… (" + (lines.length - MAXL) + " more lines)"));
       raw.appendChild(frag);

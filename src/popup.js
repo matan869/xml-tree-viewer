@@ -10,4 +10,7 @@
   const theme = document.getElementById("theme");
   chrome.storage.sync.get({ theme: "auto" }, (v) => { theme.value = (v && v.theme) || "auto"; });
   theme.addEventListener("change", () => chrome.storage.sync.set({ theme: theme.value }));
+  const json = document.getElementById("json");
+  chrome.storage.sync.get({ json: true }, (v) => { json.checked = !v || v.json !== false; });
+  json.addEventListener("change", () => chrome.storage.sync.set({ json: json.checked }));
 })();

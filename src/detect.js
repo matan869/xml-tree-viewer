@@ -1,11 +1,40 @@
-/* Content script: take over raw XML documents with the tree viewer.
-   Must never break a normal page — every path is guarded and any
-   uncertainty means "do nothing". */
+/* Content script: take over raw JSON and XML documents with the viewer.
+   Must never break a normal page — every path is guarded, any uncertainty
+   means "do nothing", and a failed takeover puts the original page back. */
 (function () {
   "use strict";
   const XMLV = self.XMLV;
   if (!XMLV) return;
 
+  // ---------- JSON ----------
+  // application/json, text/json, anything+json (ld, geo, problem, vnd.*),
+  // JSON Lines / NDJSON / json-seq.
+  const JSON_CT = /^(application|text)\/(?:[\w.-]+\+)?(?:x-)?(?:nd)?json(?:l|-seq|lines)?$/;
+  const JSON_MAX = 50 * 1048576;        // a response typed as JSON
+  const PLAIN_JSON_MAX = 10 * 1048576;  // text/plain that turns out to be JSON
+
+  function jsonSource() {
+    const ct = (document.contentType || "").toLowerCase();
+    const typed = JSON_CT.test(ct);
+    if (!typed && ct !== "text/plain") return null;
+    // Chrome shows a text response as <body><pre>…</pre></body>, newer builds
+    // add their own "pretty-print" strip next to it. Anything else = a real page.
+    if (!(document instanceof HTMLDocument) || !document.body) return null;
+    let pre = null;
+    for (const c of document.body.children) {
+      if (c.tagName === "PRE" && !pre) { pre = c; continue; }
+      if (/json-formatter/i.test(c.className || "")) continue;
+      return null;
+    }
+    if (!pre) return null;
+    const text = pre.textContent;
+    if (!text || text.length > (typed ? JSON_MAX : PLAIN_JSON_MAX)) return null;
+    if (typed) return { text, ast: null };   // invalid JSON still opens: the viewer shows where it breaks
+    if (!XMLV.looksLikeJson(text)) return null;
+    try { return { text, ast: XMLV.parseJson(text) }; } catch (e) { return null; }
+  }
+
+  // ---------- XML ----------
   function xmlSource() {
     const ct = (document.contentType || "").toLowerCase();
 
@@ -50,37 +79,55 @@
     try {
       const p = decodeURIComponent(location.pathname);
       const base = p.slice(p.lastIndexOf("/") + 1);
-      return base.replace(/\.[^.]+$/, "") || "document";
+      return base.replace(/\.[^.]+$/, "") || location.hostname || "document";
     } catch (e) { return "document"; }
   }
 
-  let xml;
-  try { xml = xmlSource(); } catch (e) { xml = null; }
-  if (!xml || !XMLV.looksLikeXml(xml)) return;
+  let found = null;
+  try { const j = jsonSource(); if (j) found = { kind: "json", text: j.text, ast: j.ast }; } catch (e) { found = null; }
+  if (!found) {
+    let xml = null;
+    try { xml = xmlSource(); } catch (e) { xml = null; }
+    if (xml && XMLV.looksLikeXml(xml)) found = { kind: "xml", text: xml };
+  }
+  if (!found) return;
 
-  function boot(theme) {
+  function freshBody(titleText) {
+    const H = "http://www.w3.org/1999/xhtml";
+    const htmlEl = document.createElementNS(H, "html");
+    const head = document.createElementNS(H, "head");
+    const meta = document.createElementNS(H, "meta");
+    meta.setAttribute("charset", "utf-8");
+    const title = document.createElementNS(H, "title");
+    title.textContent = titleText;
+    head.appendChild(meta); head.appendChild(title);
+    const body = document.createElementNS(H, "body");
+    htmlEl.appendChild(head); htmlEl.appendChild(body);
+    document.replaceChild(htmlEl, document.documentElement);
+    return body;
+  }
+
+  function boot(settings) {
+    if (found.kind === "json" && settings && settings.json === false) return;   // switched off in the popup
+    const theme = (settings && settings.theme) || "auto";
+    const onTheme = (t) => { try { chrome.storage.sync.set({ theme: t }); } catch (e) {} };
+    const original = document.documentElement;
+    const name = filenameFromUrl();
     try {
-      const H = "http://www.w3.org/1999/xhtml";
-      const htmlEl = document.createElementNS(H, "html");
-      const head = document.createElementNS(H, "head");
-      const meta = document.createElementNS(H, "meta");
-      meta.setAttribute("charset", "utf-8");
-      const title = document.createElementNS(H, "title");
-      title.textContent = filenameFromUrl() + " – XML Viewer";
-      head.appendChild(meta); head.appendChild(title);
-      const body = document.createElementNS(H, "body");
-      body.setAttribute("style", "margin:0");
-      htmlEl.appendChild(head); htmlEl.appendChild(body);
-      document.replaceChild(htmlEl, document.documentElement);
-      XMLV.buildViewer(document, body, xml, {
-        theme: theme || "auto",
-        filename: filenameFromUrl(),
-        onTheme(t) { try { chrome.storage.sync.set({ theme: t }); } catch (e) {} },
-      });
-    } catch (e) { /* leave the page as-is */ }
+      if (found.kind === "json") {
+        const body = freshBody(name + " – JSON Viewer");
+        XMLV.buildJsonViewer(document, body, found.text, { theme, filename: name, ast: found.ast, onTheme });
+      } else {
+        const body = freshBody(name + " – XML Viewer");
+        body.setAttribute("style", "margin:0");
+        XMLV.buildViewer(document, body, found.text, { theme, filename: name, onTheme });
+      }
+    } catch (e) {
+      try { if (document.documentElement !== original) document.replaceChild(original, document.documentElement); } catch (e2) {}
+    }
   }
 
   try {
-    chrome.storage.sync.get({ theme: "auto" }, (v) => boot(v && v.theme));
-  } catch (e) { boot("auto"); }
+    chrome.storage.sync.get({ theme: "auto", json: true }, (v) => boot(v));
+  } catch (e) { boot(null); }
 })();

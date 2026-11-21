@@ -2,7 +2,9 @@ import { chromium } from '/usr/lib/node_modules/playwright/index.mjs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const SHOT = process.env.SHOT_DIR || os.tmpdir();   // screenshots stay out of the repo
 
 const b = await chromium.launch();
 const p = await (await b.newContext({viewport:{width:1280,height:800}})).newPage();
@@ -73,10 +75,10 @@ await t('theme toggle switches to dark', async()=>{
   ok(await p.getAttribute('.xv-root','data-xv-theme')==='dark');
 });
 // screenshot for the store (dark), then light
-await p.screenshot({path:path.join(ROOT,'store-assets/screenshot-dark-1280x800.png')});
+await p.screenshot({path:path.join(SHOT,'xml-viewer-ui-dark.png')});
 await p.click('.xv-btn:has-text("◐")'); // -> light
 ok(true);
-await p.screenshot({path:path.join(ROOT,'store-assets/screenshot-light-1280x800.png')});
+await p.screenshot({path:path.join(SHOT,'xml-viewer-ui-light.png')});
 
 // ---- 2. parse-error handling
 await p.goto('about:blank');
@@ -86,6 +88,14 @@ await p.evaluate(()=>{ XMLV.buildViewer(document, document.body, '<a>\n<b>ok</b>
 await t('parse error shows banner + raw with highlighted line', async()=>{
   ok(await p.locator('.xv-error').isVisible());
   ok(await p.locator('.xv-raw').isVisible());
+  const e = await p.textContent('.xv-error');
+  ok(/^⚠ Invalid XML: .+ \(line \d+, column \d+\)$/.test(e) && !/following errors|Below is a rendering/.test(e), 'banner: '+e);
+  ok(await p.locator('.xv-errline').count()===1, 'no highlighted line');
+});
+await t('every raw line sits on its own row (nothing hidden after the error line)', async()=>{
+  const rows = await p.evaluate(()=>[...document.querySelectorAll('.xv-raw > span')].map(s=>{const r=s.getBoundingClientRect();return [Math.round(r.left),Math.round(r.top)];}));
+  ok(rows.length===4, 'rows '+rows.length);
+  for (let k=1;k<rows.length;k++) ok(rows[k][0]===rows[0][0] && rows[k][1]>=rows[k-1][1]+10, 'row '+(k+1)+' misplaced: '+JSON.stringify(rows));
 });
 
 // ---- 3. big file: 20k elements renders fast + lazily

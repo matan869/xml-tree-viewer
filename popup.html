@@ -19,13 +19,17 @@
   .foot { padding:8px 14px 12px; font-size:11px; color:#94a3b8; }
   .foot a { color:#2563eb; text-decoration:none; }
   #fileNote { display:none; margin:2px 14px 8px; font-size:11.5px; color:#b45309; }
+  .tog { display:flex; align-items:center; gap:8px; margin:4px 14px 10px; cursor:pointer; }
+  .tog input { width:15px; height:15px; margin:0; accent-color:#2563eb; }
 </style>
 </head>
 <body>
-<div class="head"><span class="logo">&lt;/&gt;</span> XML Viewer &amp; Formatter</div>
-<button class="btn primary" id="open">Open / paste an XML file…</button>
+<div class="head"><span class="logo">{ }</span> JSON &amp; XML Viewer</div>
+<button class="btn primary" id="open">Open / paste JSON or XML…</button>
 <button class="btn" id="fileAccess">Enable viewing local files (file://)</button>
 <div id="fileNote">On the page that opens, turn on “Allow access to file URLs”.</div>
+<div class="sec">JSON</div>
+<label class="tog"><input type="checkbox" id="json" checked> Format JSON pages automatically</label>
 <div class="sec">Theme</div>
 <select id="theme">
   <option value="auto">Auto (follow system)</option>

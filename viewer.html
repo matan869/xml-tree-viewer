@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>XML Viewer & Formatter</title>
+<title>JSON & XML Viewer</title>
 <style>
   :root { color-scheme: light dark; }
   body { margin:0; font:14px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -32,20 +32,22 @@
 </head>
 <body>
 <div class="card" id="card">
-  <h1><span class="logo">&lt;/&gt;</span> XML Viewer &amp; Formatter</h1>
-  <p class="sub">Collapsible tree · XPath search · pretty print · works offline, nothing is uploaded.</p>
-  <div class="drop" id="drop">Drop an XML file here, or click to choose</div>
-  <input type="file" id="file" accept=".xml,.rss,.atom,.xsd,.xsl,.xslt,.wsdl,.gpx,.kml,.plist,.svg,.opml,.config,.xliff,text/xml,application/xml">
-  <textarea id="paste" placeholder="…or paste XML here" spellcheck="false"></textarea>
+  <h1><span class="logo">{ }</span> JSON &amp; XML Viewer</h1>
+  <p class="sub">Collapsible tree · table · search · pretty print · works offline, nothing is uploaded.</p>
+  <div class="drop" id="drop">Drop a JSON or XML file here, or click to choose</div>
+  <input type="file" id="file" accept=".json,.jsonl,.ndjson,.geojson,.har,.xml,.rss,.atom,.xsd,.xsl,.xslt,.wsdl,.gpx,.kml,.plist,.svg,.opml,.config,.xliff,application/json,text/xml,application/xml">
+  <textarea id="paste" placeholder="…or paste JSON or XML here" spellcheck="false"></textarea>
   <div class="row">
     <button class="go" id="go">View</button>
-    <span class="hint">Tip: XML files you open from the web or disk are rendered automatically.</span>
+    <span class="hint">Tip: JSON and XML you open from the web or disk are formatted automatically.</span>
   </div>
 </div>
 <script src="src/xml.js"></script>
 <script src="src/features.js"></script>
 <script src="src/docs.js"></script>
 <script src="src/tree.js"></script>
+<script src="src/json.js"></script>
+<script src="src/jsontree.js"></script>
 <script src="src/viewer.js"></script>
 </body>
 </html>
