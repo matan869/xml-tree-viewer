@@ -1,6 +1,7 @@
 import { chromium } from '/usr/lib/node_modules/playwright/index.mjs';
-import http from 'node:http'; import fs from 'node:fs';
-const ROOT='.';
+import http from 'node:http'; import fs from 'node:fs'; import os from 'node:os';
+import path from 'node:path'; import { fileURLToPath } from 'node:url';
+const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const F=(n)=>fs.readFileSync(ROOT+'/tests/fixtures/'+n,'utf8');
 const srv=http.createServer((q,r)=>{
   const n=q.url.slice(1).split('?')[0];
@@ -14,7 +15,7 @@ const p = ctx.pages()[0] || await ctx.newPage();
 let pass=0,fail=0;
 const t=async(n,f)=>{try{await f();pass++;console.log('✓',n)}catch(e){fail++;console.log('✗',n,'-',e.message.slice(0,140))}};
 const ok=(c,m)=>{if(!c)throw new Error(m||'assert')};
-const SHOT=process.env.SHOT_DIR;
+const SHOT=process.env.SHOT_DIR||os.tmpdir();
 
 await t('UBL invoice auto-opens as a readable invoice', async()=>{
   await p.goto('http://127.0.0.1:18320/ubl-invoice.xml');

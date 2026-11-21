@@ -1,6 +1,7 @@
 import { chromium } from '/usr/lib/node_modules/playwright/index.mjs';
-import http from 'node:http'; import fs from 'node:fs';
-const ROOT='.';
+import http from 'node:http'; import fs from 'node:fs'; import os from 'node:os';
+import path from 'node:path'; import { fileURLToPath } from 'node:url';
+const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const xml=fs.readFileSync(ROOT+'/tests/fixtures/sample.xml','utf8');
 const srv=http.createServer((q,r)=>{r.setHeader('content-type','application/xml');r.end(xml);});
 await new Promise(r=>srv.listen(18310,r));
@@ -70,7 +71,7 @@ await t('live BBC RSS -> table with many rows', async()=>{
   const rows = await p.locator('.xv-grid tbody tr').count();
   console.log('   BBC rows:', rows, '| title:', await p.textContent('.xv-ptitle'));
   ok(rows>10,'rows='+rows);
-  await p.screenshot({path:process.env.SHOT_DIR+'/feat-table-bbc.png'});
+  await p.screenshot({path:path.join(process.env.SHOT_DIR||os.tmpdir(),'feat-table-bbc.png')});
 });
 console.log(`\n${pass} passed, ${fail} failed`);
 await ctx.close(); srv.close(); process.exit(fail?1:0);

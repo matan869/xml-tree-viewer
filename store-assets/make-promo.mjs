@@ -1,6 +1,8 @@
 import { chromium } from '/usr/lib/node_modules/playwright/index.mjs';
 import fs from 'fs';
-const icon = 'data:image/png;base64,' + fs.readFileSync('./icons/icon128.png').toString('base64');
+import path from 'node:path'; import { fileURLToPath } from 'node:url';
+const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const icon = 'data:image/png;base64,' + fs.readFileSync(path.join(ROOT, 'icons/icon128.png')).toString('base64');
 const html = `<!doctype html><meta charset=utf-8><style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{width:440px;height:280px;background:#0d1524;display:flex;align-items:center;gap:22px;padding:0 26px;
@@ -12,5 +14,5 @@ p{color:#93a4bd;font-size:16px;font-weight:500;margin-top:10px;line-height:1.35}
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 440, height: 280 }, deviceScaleFactor: 1 });
 await p.setContent(html); await p.waitForTimeout(400);
-await p.screenshot({ path: './store-assets/promo-440x280.png' });
+await p.screenshot({ path: path.join(ROOT, 'store-assets/promo-440x280.png') });
 await b.close();
